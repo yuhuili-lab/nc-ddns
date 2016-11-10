@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# run date
+date -d "$(curl -s --head http://google.com | grep ^Date: | sed 's/Date: //g')"
+
+CURRENT_IP=`dig +short myip.opendns.com @resolver1.opendns.com`
+
+HOST="YOUR-HOST"
+DOMAIN="YOUR-DOMAIN"
+PASS="YOUR-KEY"
+SHOWOUTPUT=false # RAW OUTPUT
+SUCCESS=true
+
+RESPONSE=`curl -s "https://dynamicdns.park-your-domain.com/update?host=${HOST}&domain=${DOMAIN}&password=${PASS}&ip=${CURRENT_IP}"`
+ERRORCOUNT=`grep -oPm1 "(?<=<ErrCount>)[^<]+" <<< "${RESPONSE}"`
+DONE=`grep -oPm1 "(?<=<Done>)[^<]+" <<< "${RESPONSE}"`
+
+if [ "$1" = "debug" ];
+then
+  SHOWOUTPUT=true
+fi
+
+if [ "${DONE}" != "true" ];
+then
+  SHOWOUTPUT=true
+  SUCCESS=false
+  echo "NOT DONE"
+fi
+
+if [ "${ERRORCOUNT}" -ne "0" ];
+then
+  SHOWOUTPUT=true
+  SUCCESS=false
+  echo "ERROR=${ERRORCOUNT}"
+fi
+
+# echo "${DONE}"
+# echo "${ERRORCOUNT}"
+# echo "${RESPONSE}"
+
+if [ "${SHOWOUTPUT}" = true ];
+then
+  echo "${SHOWOUTPUT}"
+fi
+
+if [ "${SUCCESS}" = true ];
+then
+  echo "SUCCEEDED"
+fi
