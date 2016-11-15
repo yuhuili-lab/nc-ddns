@@ -1,5 +1,5 @@
 # nc-ddns
-![Yuhui Li](https://githubtools.yuhuili.com/kagami/yuhuili/Yuhui%20Li/)
+<a href="https://github.com/yuhuili">![Yuhui Li](https://githubtools.yuhuili.com/kagami/yuhuili/Yuhui%20Li/)</a>
 
 A simple Dynamic DNS Updater for Namecheap BasicDNS.
 
